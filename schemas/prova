@@ -1,0 +1,152 @@
+CREATE TABLE catasto_2010
+(
+	gid integer NOT NULL,
+	valenza text,
+	esterconf text,
+	codbo text,
+	tipo text,
+	dim real,
+	ang real,
+	posx real,
+	posy real,
+	pintx real,
+	pinty real,
+	sup real,
+	belfiore text,
+	zona_cens text,
+	foglio text,
+	allegato text,
+	sviluppo text,
+	fog_ann text,
+	orig text,
+	label text ,
+	CONSTRAINT catasto_2010_pkey PRIMARY KEY (gid)
+);
+SELECT AddGeometryColumn( 'catasto_2010', 'the_geom', 32632, 'MULTIPOLYGON', 'XY');
+
+
+
+
+
+
+
+CREATE TABLE codici_belfiore
+(
+  id text NOT NULL,
+  id_regione text,
+  id_provincia text,
+  id_comune text,
+  toponimo text ,
+  CONSTRAINT codici_belfiore_pkey PRIMARY KEY (id)
+);
+
+
+
+
+
+CREATE TABLE istat_regioni
+(
+  id_istat text  NOT NULL,
+  toponimo text  NOT NULL,
+  CONSTRAINT istat_regioni_pkey PRIMARY KEY (id_istat)
+);
+
+
+
+
+
+CREATE TABLE istat_province
+(
+  id_istat text  NOT NULL,
+  toponimo text  NOT NULL,
+  idregione text  NOT NULL,
+  sigla text  NOT NULL,
+  CONSTRAINT istat_province_pkey PRIMARY KEY (id_istat),
+  CONSTRAINT istat_province_idregione_fkey FOREIGN KEY (idregione)
+      REFERENCES istat_regioni (id_istat) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT istat_province_sigla_key UNIQUE (sigla)
+);
+
+
+
+
+CREATE TABLE istat_comuni
+(
+  id_istat text NOT NULL,
+  toponimo text  NOT NULL,
+  idprovincia text NOT NULL,
+  CONSTRAINT istat_comuni_idprovincia_fkey FOREIGN KEY (idprovincia)
+      REFERENCES istat_province (id_istat) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT istat_comuni_key UNIQUE (idprovincia, id_istat)
+);
+
+
+----------------------------------------
+
+
+
+
+
+
+
+CREATE TABLE catasto_2010
+(
+	gid integer NOT NULL,
+	valenza text,
+	esterconf text,
+	codbo text,
+	tipo text,
+	dim real,
+	ang real,
+	posx real,
+	posy real,
+	pintx real,
+	pinty real,
+	sup real,
+	belfiore text,
+	zona_cens text,
+	foglio text,
+	allegato text,
+	sviluppo text,
+	fog_ann text,
+	orig text,
+	the_geom,
+	label text varying,
+	CONSTRAINT catasto_2010_pkey PRIMARY KEY (gid),
+	CONSTRAINT enforce_dims_the_geom CHECK (ndims(the_geom) = 2),
+	CONSTRAINT enforce_geotype_the_geom CHECK (geometrytype(the_geom) = 'MULTIPOLYGON' OR the_geom IS NULL),
+	CONSTRAINT enforce_srid_the_geom CHECK (srid(the_geom) = 32632)
+)
+SELECT AddGeometryColumn( 'catasto_2010', 'the_geom', 32632, 'MULTIPOLYGON', 'XY');
+
+
+
+
+CREATE TABLE codici_belfiore
+(
+  id text NOT NULL,
+  id_regione text,
+  id_provincia text,
+  id_comune text,
+  toponimo text varying,
+  CONSTRAINT codici_belfiore_pkey PRIMARY KEY (id)
+)
+
+
+
+
+
+
+
+CREATE TABLE istat_comuni
+(
+  id_istat text NOT NULL,
+  toponimo text varying NOT NULL,
+  idprovincia text NOT NULL,
+  CONSTRAINT istat_comuni_idprovincia_fkey FOREIGN KEY (idprovincia)
+      REFERENCES istat_province (id_istat) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT istat_comuni_key UNIQUE (idprovincia, id_istat)
+)
