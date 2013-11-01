@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'dlgSelectProvinciaComuni.ui'
 #
-# Created: Fri Nov  1 10:14:23 2013
+# Created: Wed Oct 30 17:12:11 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
