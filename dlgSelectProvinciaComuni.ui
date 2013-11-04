@@ -105,6 +105,16 @@
       </layout>
      </item>
      <item>
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>DB di Destinazione</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="selectOutFilePushButton">
        <property name="text">
         <string>Seleziona DB di destinazione</string>

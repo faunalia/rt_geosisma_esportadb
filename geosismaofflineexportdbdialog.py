@@ -19,7 +19,7 @@
  *                                                                         *
  ***************************************************************************/
 """
-import time, os
+import time, os, inspect
 from qgis.core import *
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
@@ -40,6 +40,8 @@ DATABASE_USER = "postgres"
 DATABASE_PWD = "postgres"
 
 MESSAGELOG_CLASS = "Exporta DB"
+
+GEOSISMA_OFFLINE_PLUGIN_NAME = "rt_geosisma_offline"
 
 class GeosismaOfflineExportDBDialog(QDialog):
 
@@ -89,18 +91,20 @@ class GeosismaOfflineExportDBDialog(QDialog):
         
         # add event to select destination db
         settings = QSettings()
-        self.destinationDBFileName = settings.value("/rt_geosisma_exportadb/destinationDBFileName", "./geosima_geo.sqlite")
+        plugin_path = os.path.dirname(os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0]))
+        self.destinationDBFileName = os.path.join(plugin_path, GEOSISMA_OFFLINE_PLUGIN_NAME, "dbs", DATABASE_NAME+".sqlite")
+        #self.destinationDBFileName = settings.value("/rt_geosisma_esportadb/destinationDBFileName", self.destinationDBFileName)
         
         self.ui.selectOutFilePushButton.setText( self.destinationDBFileName )
-        self.ui.selectOutFilePushButton.clicked.connect(self.selectDestinationDB)
-        
+        #self.ui.selectOutFilePushButton.clicked.connect(self.selectDestinationDB)
+
 
     def selectDestinationDB(self):
         currentDir = os.path.dirname(self.destinationDBFileName)
         self.destinationDBFileName = QFileDialog.getOpenFileName(self, "Apri o inserisci un filename", currentDir, "SpatiaLite DB (*.sqlite);; All Files (*)")
         
-        self.settings.setValue("/rt_geosisma_exportadb/destinationDBFileName", self.destinationDBFileName)
-        
+        self.settings.setValue("/rt_geosisma_esportadb/destinationDBFileName", self.destinationDBFileName)
+
 
     def initConnection(self, dbname):
         try:

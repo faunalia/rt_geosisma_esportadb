@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'dlgSelectProvinciaComuni.ui'
 #
-# Created: Wed Oct 30 17:12:11 2013
+# Created: Mon Nov  4 11:41:47 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -70,6 +70,10 @@ class Ui_DlgSelectProvinciaComuni(object):
         self.selectedComuniListView.setObjectName(_fromUtf8("selectedComuniListView"))
         self.horizontalLayout.addWidget(self.selectedComuniListView)
         self.verticalLayout.addLayout(self.horizontalLayout)
+        self.label_5 = QtGui.QLabel(DlgSelectProvinciaComuni)
+        self.label_5.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_5.setObjectName(_fromUtf8("label_5"))
+        self.verticalLayout.addWidget(self.label_5)
         self.selectOutFilePushButton = QtGui.QPushButton(DlgSelectProvinciaComuni)
         self.selectOutFilePushButton.setObjectName(_fromUtf8("selectOutFilePushButton"))
         self.verticalLayout.addWidget(self.selectOutFilePushButton)
@@ -106,6 +110,7 @@ class Ui_DlgSelectProvinciaComuni(object):
         self.label_3.setText(QtGui.QApplication.translate("DlgSelectProvinciaComuni", "Comuni da Esportare", None, QtGui.QApplication.UnicodeUTF8))
         self.addPushButton.setText(QtGui.QApplication.translate("DlgSelectProvinciaComuni", ">", None, QtGui.QApplication.UnicodeUTF8))
         self.removePushButton.setText(QtGui.QApplication.translate("DlgSelectProvinciaComuni", "<", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_5.setText(QtGui.QApplication.translate("DlgSelectProvinciaComuni", "DB di Destinazione", None, QtGui.QApplication.UnicodeUTF8))
         self.selectOutFilePushButton.setText(QtGui.QApplication.translate("DlgSelectProvinciaComuni", "Seleziona DB di destinazione", None, QtGui.QApplication.UnicodeUTF8))
         self.exportDbPushButton.setText(QtGui.QApplication.translate("DlgSelectProvinciaComuni", "Exporta DB", None, QtGui.QApplication.UnicodeUTF8))
 
