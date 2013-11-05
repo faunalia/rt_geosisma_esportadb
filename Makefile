@@ -1,5 +1,5 @@
 #/***************************************************************************
-# GeosismaOfflineExportDB
+# rt_geosisma_esportadb
 # 
 # Exporta porzioni del Db PostGis di Geosisma in Spatialite 
 #                             -------------------
@@ -29,7 +29,7 @@ TRANSLATIONS =
 
 # global
 
-PLUGINNAME = geosismaofflineexportdb
+PLUGINNAME = rt_geosisma_esportadb
 
 PY_FILES = geosismaofflineexportdb.py geosismaofflineexportdbdialog.py __init__.py
 
@@ -89,7 +89,7 @@ zip: deploy dclean
 #   make package VERSION=Version_0.3.2
 package: compile
 		rm -f $(PLUGINNAME).zip
-		git archive --prefix=$(PLUGINNAME)/ -o $(PLUGINNAME).zip $(VERSION)
+		git archive --prefix=$(PLUGINNAME)/ --format zip -o $(PLUGINNAME).zip $(VERSION)
 		echo "Created package: $(PLUGINNAME).zip"
 
 upload: zip
