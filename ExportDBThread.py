@@ -1,4 +1,4 @@
-import os, json
+import os, json, traceback
 from collections import OrderedDict
 from qgis.core import *
 from PyQt4.QtCore import *
@@ -31,6 +31,7 @@ class ExportDbThread(QThread):
             self.procDone.emit(True)
             
         except Exception as e:
+            traceback.print_exc()
             self.procDone.emit(False)
             self.procMessage.emit(e.message, QgsMessageLog.CRITICAL)
             raise e
