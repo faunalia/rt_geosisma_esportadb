@@ -1,0 +1,2 @@
+zz_wms.list.txt.zip: contains a list of wms layers to download in the cache. Put this file in a public location
+QGIS2.conf: contains configuration parameters that you'll find in $HOME/.config/QGIS/QGIS2.conf conf file
