@@ -86,11 +86,11 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         self.ui.buttonBox.rejected.connect(self.manageClosecCallback)
         #self.createDB()
         # populate db
-        selectedComuni = [{u'idprovincia': u'045', u'id_istat': u'004', u'toponimo': u'Casola in Lunigiana'}]
-        item = QStandardItem( selectedComuni[0]["toponimo"] )
-        item.setData( selectedComuni[0]  )
-        self.selectedCouniModel.appendRow(item)
-        self.ui.selectedComuniListView.setModel(self.selectedCouniModel)
+#         selectedComuni = [{u'idprovincia': u'045', u'id_istat': u'004', u'toponimo': u'Casola in Lunigiana'}]
+#         item = QStandardItem( selectedComuni[0]["toponimo"] )
+#         item.setData( selectedComuni[0]  )
+#         self.selectedCouniModel.appendRow(item)
+#         self.ui.selectedComuniListView.setModel(self.selectedCouniModel)
         #self.populateDB(selectedComuni)
         #self.ui.comuniListView.setSelectionMode(QAbstractItemView.MultiSelection)
         #self.ui.selectedComuniListView.setSelectionMode(QAbstractItemView.MultiSelection)
