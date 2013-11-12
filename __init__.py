@@ -23,5 +23,5 @@
 
 def classFactory(iface):
     # load GeosismaOfflineExportDB class from file GeosismaOfflineExportDB
-    from geosismaofflineexportdb import GeosismaOfflineExportDB
-    return GeosismaOfflineExportDB(iface)
+    from geosismaofflinepreparecache import GeosismaOfflinePrepareCache
+    return GeosismaOfflinePrepareCache(iface)

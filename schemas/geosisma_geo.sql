@@ -115,5 +115,3 @@ CREATE TABLE catasto_2010
 );
 SELECT AddGeometryColumn( 'catasto_2010', 'the_geom', 32632, 'MULTIPOLYGON', 'XY');
 SELECT CreateSpatialIndex('catasto_2010', 'the_geom');
-
--------------------------------------------------------------------

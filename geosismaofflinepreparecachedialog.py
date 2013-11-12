@@ -235,7 +235,7 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
     def prepareData(self):
         try:
             QApplication.setOverrideCursor(Qt.WaitCursor)
-            #self.exportDB()
+            self.exportDB()
             self.prepareCache()
         except Exception as e:
             traceback.print_exc()

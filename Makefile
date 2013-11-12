@@ -1,5 +1,5 @@
 #/***************************************************************************
-# rt_geosisma_esportadb
+# rt_geosisma_preparacache
 # 
 # Exporta porzioni del Db PostGis di Geosisma in Spatialite 
 #                             -------------------
@@ -23,15 +23,15 @@ PLUGIN_UPLOAD = $(CURDIR)/plugin_upload.py
 # Makefile for a PyQGIS plugin 
 
 # translation
-SOURCES = geosismaofflineexportdb.py ui_dlgSelectProvinciaComuni.py __init__.py geosismaofflineexportdbdialog.py
-#TRANSLATIONS = i18n/geosismaofflineexportdb_en.ts
+SOURCES = geosismaofflinepreparecache.py ui_dlgSelectProvinciaComuni.py __init__.py geosismaofflinepreparecachedialog.py
+#TRANSLATIONS = i18n/geosismaofflinepreparecache_en.ts
 TRANSLATIONS = 
 
 # global
 
-PLUGINNAME = rt_geosisma_esportadb
+PLUGINNAME = rt_geosisma_preparacache
 
-PY_FILES = geosismaofflineexportdb.py geosismaofflineexportdbdialog.py __init__.py
+PY_FILES = geosismaofflinepreparecache.py geosismaofflinepreparecachedialog.py __init__.py
 
 EXTRAS = icon.png metadata.txt
 

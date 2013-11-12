@@ -107,7 +107,7 @@
      <item>
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>DB di Destinazione</string>
+        <string>Path di Destinazione dei dati offline</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -115,16 +115,16 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="selectOutFilePushButton">
+      <widget class="QPushButton" name="selectOutPathPushButton">
        <property name="text">
-        <string>Seleziona DB di destinazione</string>
+        <string>Seleziona path di destinazione dei dati</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="exportDbPushButton">
+      <widget class="QPushButton" name="prepareDataPushButton">
        <property name="text">
-        <string>Exporta DB</string>
+        <string>Prepara dati Offline</string>
        </property>
       </widget>
      </item>

@@ -9,9 +9,9 @@
 
 
 [general]
-name=RT Geosisma EsportaDB
+name=RT Geosisma Prepara Cache
 qgisMinimumVersion=2.0
-description=Exporta porzioni del Db PostGis di Geosisma in Spatialite 
+description=Prepara la cache di layer WMS per il funzionamento offline di rt_geosisma_offline
 version=0.1
 author=Luigi Pirelli
 email=luipir@gmail.com
@@ -25,7 +25,7 @@ email=luipir@gmail.com
 	Added
 
 # tags are comma separated with spaces allowed
-tags=Geosisma, Regione Toscana, Offline, export, Database
+tags=Geosisma, Regione Toscana, Offline, cache
 
 homepage=
 tracker=

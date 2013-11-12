@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/plugins/geosismaofflineexportdb" >
+    <qresource prefix="/plugins/geosismaofflinepreparecache">
         <file>icon.png</file>
     </qresource>
 </RCC>

@@ -1,4 +1,4 @@
-import os, json
+import os, json, traceback
 from collections import OrderedDict
 from qgis.core import *
 from PyQt4.QtCore import *
@@ -8,7 +8,7 @@ from pyspatialite import dbapi2 as db
 # SpatiaLite DB settings
 DATABASE_SRID = 32632 # <- have to match with source DB and cratedb script
 
-class ExportDbThread(QThread):
+class ExportDBThread(QThread):
     
     def __init__(self, pgcursor, selectedComuni, outDb):
         QThread.__init__(self)
@@ -31,6 +31,7 @@ class ExportDbThread(QThread):
             self.procDone.emit(True)
             
         except Exception as e:
+            traceback.print_exc()
             self.procDone.emit(False)
             self.procMessage.emit(e.message, QgsMessageLog.CRITICAL)
             raise e
@@ -67,22 +68,28 @@ class ExportDbThread(QThread):
 
         # connect spatialite db
         conn = db.connect(self.DATABASE_OUTNAME)
+        print self.DATABASE_OUTNAME
+        
         
         try:
             # copy tables
             tables = ["istat_regioni", "istat_province", "istat_comuni", "codici_belfiore", "istat_loc_tipi"]
             for table in tables:
                 self.copyTable(conn, table)
-            
+             
             # coopy table with geom
             tables = ["istat_loc"]
             for table in tables:
                 self.copyGeomTable(conn, table)
-            
+             
             # get instat poligos only related to selectedComuni
             for comune in selectedComuni:
                 print "exporting fields for: ", comune["toponimo"], "..."
                 self.copyCatasto2010Polygons(conn, comune)
+            
+                # generate extent for the current geodb
+                #print "generating extent for: ", comune["toponimo"], "..."
+                #self.updateExtent(conn, comune)
             
             #commit population
             conn.commit()
@@ -158,7 +165,6 @@ class ExportDbThread(QThread):
                 
                 if self.stopThread:
                     return
-
                     
         except db.Error as e:
             self.procMessage.emit(e.message, QgsMessageLog.CRITICAL)
@@ -206,8 +212,8 @@ class ExportDbThread(QThread):
         """.format(**comuneDict)
         
         # query all poligons
+        self.procMessage.emit(self.tr("Copiando n: %d records" % self.cursor.rowcount), QgsMessageLog.INFO)
         self.cursor.execute( sqlquery )
-        self.procMessage.emit("Copiando n: %d records" % self.cursor.rowcount, QgsMessageLog.INFO)
         
         # add record to spatialite db
         for poligons in self.cursor.fetchall():
@@ -239,3 +245,55 @@ class ExportDbThread(QThread):
             
             if self.stopThread:
                 return
+
+
+#     def updateExtent(self, spliteconn, comuneDict):
+#         if self.stopThread:
+#             return
+#         
+#         # get extent from postgis db... bettehr than doing it in spatialite that is too slow!
+#         sqlquery = ""
+#         sqlquery += """
+#         SELECT 
+#             ST_AsText( 
+#                 ST_Envelope(
+#                     ST_Union(
+#                         ST_Envelope(catasto_2010.the_geom)
+#                     )
+#                 )
+#             )
+#         FROM 
+#             public.catasto_2010, 
+#             public.codici_belfiore, 
+#             public.istat_comuni
+#         WHERE 
+#             catasto_2010.belfiore = codici_belfiore.id AND
+#             codici_belfiore.id_comune = istat_comuni.id_istat AND
+#             codici_belfiore.id_provincia = istat_comuni.idprovincia AND
+#             codici_belfiore.toponimo = istat_comuni.toponimo AND
+#             istat_comuni.id_istat = '{id_istat}' AND 
+#             istat_comuni.idprovincia = '{idprovincia}' AND 
+#             istat_comuni.toponimo = '{toponimo}';
+#         """.format(**comuneDict)
+#         
+#         # query extent in WKT format
+#         self.procMessage.emit(self.tr("Generando l'extent della tabella catasto_2010 e aggionando il DB spatialite"), QgsMessageLog.INFO)
+#         self.cursor.execute( sqlquery )
+#         
+#         wkt = self.cursor.fetchone()
+#         geom = QgsGeometry.fromWkt( wkt[0] )
+#         if not geom:
+#             raise Exception( self.tr("Extent errato: %s" % wkt[0]) )
+#         
+#         # add in spatialite db
+#         extentDict = comuneDict;
+#         extentDict["the_geom"] = wkt[0]
+#         
+#         sqlquery = """
+#         INSERT INTO
+#             geosisma_extent
+#         VALUES
+#             ('{id_istat}', '{toponimo}', '{idprovincia}', GeomFromText('{the_geom}', %d) );
+#         """.format(**extentDict)
+#         sqlquery = sqlquery % (DATABASE_SRID)
+#         spliteconn.cursor().execute(sqlquery)

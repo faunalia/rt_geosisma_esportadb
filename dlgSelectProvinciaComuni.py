@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'dlgSelectProvinciaComuni.ui'
 #
-# Created: Mon Nov  4 11:54:03 2013
+# Created: Fri Nov  8 10:30:38 2013
 #      by: PyQt4 UI code generator 4.9.3
 #
 # WARNING! All changes made in this file will be lost!
@@ -74,12 +74,12 @@ class Ui_DlgSelectProvinciaComuni(object):
         self.label_5.setAlignment(QtCore.Qt.AlignCenter)
         self.label_5.setObjectName(_fromUtf8("label_5"))
         self.verticalLayout.addWidget(self.label_5)
-        self.selectOutFilePushButton = QtGui.QPushButton(DlgSelectProvinciaComuni)
-        self.selectOutFilePushButton.setObjectName(_fromUtf8("selectOutFilePushButton"))
-        self.verticalLayout.addWidget(self.selectOutFilePushButton)
-        self.exportDbPushButton = QtGui.QPushButton(DlgSelectProvinciaComuni)
-        self.exportDbPushButton.setObjectName(_fromUtf8("exportDbPushButton"))
-        self.verticalLayout.addWidget(self.exportDbPushButton)
+        self.selectOutPathPushButton = QtGui.QPushButton(DlgSelectProvinciaComuni)
+        self.selectOutPathPushButton.setObjectName(_fromUtf8("selectOutPathPushButton"))
+        self.verticalLayout.addWidget(self.selectOutPathPushButton)
+        self.prepareDataPushButton = QtGui.QPushButton(DlgSelectProvinciaComuni)
+        self.prepareDataPushButton.setObjectName(_fromUtf8("prepareDataPushButton"))
+        self.verticalLayout.addWidget(self.prepareDataPushButton)
         self.progressBar = QtGui.QProgressBar(DlgSelectProvinciaComuni)
         self.progressBar.setProperty("value", 0)
         self.progressBar.setTextVisible(False)
@@ -110,7 +110,7 @@ class Ui_DlgSelectProvinciaComuni(object):
         self.label_3.setText(QtGui.QApplication.translate("DlgSelectProvinciaComuni", "Comuni da Esportare", None, QtGui.QApplication.UnicodeUTF8))
         self.addPushButton.setText(QtGui.QApplication.translate("DlgSelectProvinciaComuni", ">", None, QtGui.QApplication.UnicodeUTF8))
         self.removePushButton.setText(QtGui.QApplication.translate("DlgSelectProvinciaComuni", "<", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_5.setText(QtGui.QApplication.translate("DlgSelectProvinciaComuni", "DB di Destinazione", None, QtGui.QApplication.UnicodeUTF8))
-        self.selectOutFilePushButton.setText(QtGui.QApplication.translate("DlgSelectProvinciaComuni", "Seleziona DB di destinazione", None, QtGui.QApplication.UnicodeUTF8))
-        self.exportDbPushButton.setText(QtGui.QApplication.translate("DlgSelectProvinciaComuni", "Exporta DB", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_5.setText(QtGui.QApplication.translate("DlgSelectProvinciaComuni", "Path di Destinazione dei dati offline", None, QtGui.QApplication.UnicodeUTF8))
+        self.selectOutPathPushButton.setText(QtGui.QApplication.translate("DlgSelectProvinciaComuni", "Seleziona path di destinazione dei dati", None, QtGui.QApplication.UnicodeUTF8))
+        self.prepareDataPushButton.setText(QtGui.QApplication.translate("DlgSelectProvinciaComuni", "Prepara dati Offline", None, QtGui.QApplication.UnicodeUTF8))
 
