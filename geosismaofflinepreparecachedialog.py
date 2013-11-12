@@ -236,6 +236,8 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         try:
             QApplication.setOverrideCursor(Qt.WaitCursor)
             self.exportDB()
+            if not self.terminatedExportDb:
+                return
             self.prepareCache()
         except Exception as e:
             traceback.print_exc()
@@ -259,6 +261,8 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
 
     def exportDB(self):
         print "started exportDB"
+        self.terminatedExportDb = False # set true only if successfully finished
+        
         if self.selectedCouniModel.rowCount() == 0:
             return
         # get list of selected Comuni
@@ -292,6 +296,8 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
             qApp.processEvents()
             time.sleep(0.1)
             continue;
+        
+        print "terminated exportDB"
 
 
     def prepareCache(self):
@@ -350,12 +356,14 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         self.ui.progressBar.hide()
         wmsManager = DlgWmsLayersManager(self.iface, self.wmsLayersBridge, self)
         wmsManager.exec_()
-        #currentRect = xform.transformBoundingBox(rect)
 
         # reset previous rederer config 
         self.canvas.setRenderFlag( prevRenderFlag )
         # restore the raster legend icons creation
         settings.setValue("/qgis/createRasterLegendIcons", prevRasterIcons)
+
+        self.ui.logLabel.setText(self.tr(""))
+        QMessageBox.information(self, "", self.tr("Preparazione dati avvenuta con successo"))
 
     def getExtentAndSrid(self):
         
@@ -386,17 +394,17 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
 
 
     def exportDBTerminated(self, val):
-        self.terminatedProcess = val
+        self.terminatedExportDb = val
         
         if self.manageClose:
             return
         
-        if self.terminatedProcess:
+        if self.terminatedExportDb:
             self.ui.progressBar.setValue(100)
-            self.ui.logLabel.setText("")
-            QMessageBox.information(self, "", "Export avvenuto con successo")
+            self.ui.logLabel.setText(self.tr("Export del DB avvenuto con successo... preparazione cache. Attendere!"))
+            #QMessageBox.information(self, "", self.tr("Export avvenuto con successo"))
         else:
-            QMessageBox.critical(self, "", "Export fallito. Verifica la finestra di Log")
+            QMessageBox.critical(self, "", self.tr("Export fallito. Verifica la finestra di Log"))
 
     def manageClosecCallback(self):
         self.manageClose = True

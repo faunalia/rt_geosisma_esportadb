@@ -667,7 +667,7 @@ class WmsLayersBridge:
 	@classmethod
 	def getSridFromConf(self):
 		settings = QSettings()
-		srid = settings.value( "/rt_geosisma_preparacache/defaultSrid", None )
+		srid = settings.value( "/rt_geosisma_preparacache/defaultSrid", 3003 )
 		return int( srid )
 	
 	
