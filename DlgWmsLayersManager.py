@@ -422,7 +422,7 @@ class DlgWmsLayersManager(DlgWaiting):
 					# restore projection behaviour
 					settings.setValue( "/Projections/defaultBehaviour", oldProjectionBehaviour )
 				
-				rl.setTransparentBandName( "Band 4" )
+				#rl.setTransparentBandName( "Band 4" )
 				prop = "RLID_WMS_OFFLINE %s" % order
 
 			if not rl.isValid():
@@ -578,42 +578,8 @@ class DlgWmsLayersManager(DlgWaiting):
 						WmsLayersBridge.showMessage("RT Geosisma", u"Impossibile recuperare la lista dei layer WMS dal server.\n%s" % unicode(e) )
 				
 		if len(layersinfo) <= 0:
-			# unable to retrieve the list, get values from ZZ_WMS table
-			WmsLayersBridge.showMessage("RT Geosisma", u"Recupero la lista dei layer WMS dal database..." )
-			
-			whereclauses = [ "1=1" ]
-			if len(retrieveList) > 0:
-				whereclauses.append( u'"ORDER" IN (%s)' % u",".join( map(str, retrieveList) ) )
-			if len(excludeList) > 0:
-				whereclauses.append( u'"ORDER" NOT IN (%s)' % u",".join( map(str, excludeList) ) )
-			
-			query = WmsLayersBridge.Query( u'SELECT * FROM ZZ_WMS WHERE %s ORDER BY "ORDER" ASC' % " AND ".join(whereclauses) )
-			query = query.getQuery()
-			if not query.exec_():
-				WmsLayersBridge._onQueryError( query.lastQuery(), query.lastError().text(), WmsLayersBridge.instance )
-				return
-
-			while query.next():
-				layer = {}
-				layer['order'] = query.value(0)
-				layer['title'] = query.value(1)
-				layer['url'] = query.value(2)
-				
-				layer['layers'] = query.value(3).split(",")
-				layer['styles'] = [ '' ] * len( layer['layers'] )
-				layer['crs'] = query.value(4)
-				layer['format'] = "image/%s" % query.value(5).toLower()
-				layer['transparent'] = query.value(6)
-				layer['version'] = query.value(7)
-				
-				layer['cache_scale'], ok = query.value(8)
-				if not ok:
-					layer['cache_scale']= None
-				layer['cache_extent'], ok = query.value(9)
-				if not ok:
-					layer['cache_extent'] = None
-				
-				layersinfo.append(layer)
+			# unable to retrieve the list
+			QgsMessageLog.logMessage(u"Nessun layer da aggiungere" , "RT Geosisma", QgsMessageLog.INFO)
 			
 		return layersinfo
 
