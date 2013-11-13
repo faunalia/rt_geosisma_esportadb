@@ -128,7 +128,7 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         
         # set layer cache path
         self.destinationCachePath = os.path.join(self.destinationPathName, CACHE_LAYERS_SUBDIRS, SPLITE_DATABASE_NAME)
-        self.setPathToCache(self.destinationCachePath)
+        WmsLayersBridge.setPathToCache(self.destinationCachePath)
 
 
     def initConnection(self, dbname):
