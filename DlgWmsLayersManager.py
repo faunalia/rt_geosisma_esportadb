@@ -2,11 +2,12 @@
 
 """
 /***************************************************************************
-Name                 : Omero RT
-Description          : Omero plugin
+Name                 : RT Geosisma Offline
+Description          : Geosisma Offline Plugin
 Date                 : October 21, 2011 
 copyright            : (C) 2011 by Giuseppe Sucameli (Faunalia)
-email                : sucameli@faunalia.it
+modified             : (C) 2013 by Luigi Pirelli (Faunalia)
+email                : sucameli@faunalia.it - luigi.pirelli@faunalia.it
  ***************************************************************************/
 
 This code has been extracted from rt omero plugin to be resused in rt geosisma offline plugin
