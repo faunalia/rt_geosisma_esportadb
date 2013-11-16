@@ -416,8 +416,15 @@ class DlgWmsLayersManager(DlgWaiting):
 				settings = QSettings()
 				oldProjectionBehaviour = settings.value( "/Projections/defaultBehaviour", "prompt", str )
 				settings.setValue( "/Projections/defaultBehaviour", "useProject" )
+
+				# skip if layer is already loaded
+				newtitle = u"CACHED - %s" % title 
+				layers = QgsMapLayerRegistry.instance().mapLayersByName(newtitle)
+				if len(layers) > 0:
+					continue
+				
 				try:
-					rl = QgsRasterLayer( vrt_path, u"CACHED - %s" % title )
+					rl = QgsRasterLayer( vrt_path, u"CACHED - %s" % newtitle )
 				finally:
 					# restore projection behaviour
 					settings.setValue( "/Projections/defaultBehaviour", oldProjectionBehaviour )
