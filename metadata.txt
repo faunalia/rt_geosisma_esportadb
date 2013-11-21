@@ -12,7 +12,7 @@
 name=RT Geosisma Prepara Cache
 qgisMinimumVersion=2.0
 description=Prepara la cache di layer WMS per il funzionamento offline di rt_geosisma_offline
-version=0.1
+version=0.2
 author=Luigi Pirelli
 email=luipir@gmail.com
 
@@ -21,7 +21,9 @@ email=luipir@gmail.com
 # Optional items:
 
 # Uncomment the following line and add your changelog entries:
-# changelog=0.1
+# changelog=0.2
+	ExportDB e Preparazione cache
+	0.1
 	Added
 
 # tags are comma separated with spaces allowed
