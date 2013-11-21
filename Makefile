@@ -1,7 +1,7 @@
 #/***************************************************************************
 # rt_geosisma_preparacache
 # 
-# Exporta porzioni del Db PostGis di Geosisma in Spatialite 
+# Gestione offline delle scede di vulnerabilita' di Geosisma
 #                             -------------------
 #        begin                : 2013-10-21
 #        copyright            : (C) 2013 by Luigi Pirelli
@@ -22,33 +22,34 @@ PLUGIN_UPLOAD = $(CURDIR)/plugin_upload.py
 
 # Makefile for a PyQGIS plugin 
 
-# translation
-SOURCES = geosismaofflinepreparecache.py ui_dlgSelectProvinciaComuni.py __init__.py geosismaofflinepreparecachedialog.py
-#TRANSLATIONS = i18n/geosismaofflinepreparecache_en.ts
-TRANSLATIONS = 
-
 # global
 
 PLUGINNAME = rt_geosisma_preparacache
 
-PY_FILES = geosismaofflinepreparecache.py geosismaofflinepreparecachedialog.py __init__.py
+# translation
+SOURCES = $(wildcard *.py)
+TRANSLATIONS = i18n/rt_geosisma_preparacache_en.ts
 
-EXTRAS = icon.png metadata.txt
+EXTRAS = config/ schemas/ AUTHORS.txt LICENSE metadata.txt README.txt
 
-UI_FILES = dlgSelectProvinciaComuni.py
+PY_FILES = $(wildcard *.py)
 
-RESOURCE_FILES = resources_rc.py
+UI_SOURCES=$(wildcard *.ui)
+UI_FILES=$(patsubst %.ui,%_ui.py,$(UI_SOURCES))
+
+RC_SOURCES=$(wildcard *.qrc)
+RC_FILES=$(patsubst %.qrc,%_rc.py,$(RC_SOURCES))
 
 HELP = help/build/html
 
 default: compile
 
-compile: $(UI_FILES) $(RESOURCE_FILES)
+compile: $(UI_FILES) $(RC_FILES)
 
 %_rc.py : %.qrc
 	pyrcc4 -o $*_rc.py  $<
 
-%.py : %.ui
+$(UI_FILES): %_ui.py: %.ui
 	pyuic4 -o $@ $<
 
 %.qm : %.ts
@@ -56,31 +57,33 @@ compile: $(UI_FILES) $(RESOURCE_FILES)
 
 # The deploy  target only works on unix like operating system where
 # the Python plugin directory is located at:
-# $HOME/.qgis/python/plugins
-deploy: compile doc transcompile
-	mkdir -p $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
-	cp -vf $(PY_FILES) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
-	cp -vf $(UI_FILES) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
-	cp -vf $(RESOURCE_FILES) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
-	cp -vf $(EXTRAS) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
-	cp -vfr i18n $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
-	cp -vfr $(HELP) $(HOME)/.qgis/python/plugins/$(PLUGINNAME)/help
+# $HOME/.qgis2/python/plugins
+#deploy: compile doc transcompile
+deploy: compile doc
+	mkdir -p $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
+	cp -vf $(PY_FILES) $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
+	cp -vf $(UI_FILES) $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
+	cp -vf $(RC_FILES) $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
+	cp -vfr $(EXTRAS) $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
+	cp -vfr $(HELP) $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
+#cp -vfr i18n $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
 
 # The dclean target removes compiled python files from plugin directory
 # also delets any .svn entry
 dclean:
-	find $(HOME)/.qgis/python/plugins/$(PLUGINNAME) -iname "*.pyc" -delete
-	find $(HOME)/.qgis/python/plugins/$(PLUGINNAME) -iname ".svn" -prune -exec rm -Rf {} \;
+	find $(HOME)/.qgis2/python/plugins/$(PLUGINNAME) -iname "*.pyc" -delete
+	find $(HOME)/.qgis2/python/plugins/$(PLUGINNAME) -iname ".svn" -prune -exec rm -Rf {} \;
+	find $(HOME)/.qgis2/python/plugins/$(PLUGINNAME) -iname ".git" -prune -exec rm -Rf {} \;
 
 # The derase deletes deployed plugin
 derase:
-	rm -Rf $(HOME)/.qgis/python/plugins/$(PLUGINNAME)
+	rm -Rf $(HOME)/.qgis2/python/plugins/$(PLUGINNAME)
 
 # The zip target deploys the plugin and creates a zip file with the deployed
 # content. You can then upload the zip file on http://plugins.qgis.org
 zip: deploy dclean 
 	rm -f $(PLUGINNAME).zip
-	cd $(HOME)/.qgis/python/plugins; zip -9r $(CURDIR)/$(PLUGINNAME).zip $(PLUGINNAME)
+	cd $(HOME)/.qgis2/python/plugins; zip -9r $(CURDIR)/$(PLUGINNAME).zip $(PLUGINNAME)
 
 # Create a zip package of the plugin named $(PLUGINNAME).zip. 
 # This requires use of git (your plugin development directory must be a 
@@ -110,7 +113,7 @@ transclean:
 	rm -f i18n/*.qm
 
 clean:
-	rm $(UI_FILES) $(RESOURCE_FILES)
+	rm $(UI_FILES) $(RC_FILES) *.pyc
 
 # build documentation with sphinx
 doc: 
