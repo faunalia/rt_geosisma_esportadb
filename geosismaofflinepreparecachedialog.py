@@ -56,6 +56,10 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
     RLID_WMS = {} # probably unuseful
     instance = None
     
+    # signals
+    exportDbDone = pyqtSignal(bool)
+    prepareCacheDone = pyqtSignal(bool)
+
     def __init__(self, iface):
         QDialog.__init__(self)
         GeosismaOfflinePrepareCacheDialog.instance = self
@@ -75,8 +79,9 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         self.ui.provinceComboBox.currentIndexChanged.connect(self.selectComuni)
         self.ui.addPushButton.clicked.connect(self.addComuneToSlected)
         self.ui.removePushButton.clicked.connect(self.removeComuneFromSelected)
-        self.ui.prepareDataPushButton.clicked.connect(self.prepareData)
+        self.ui.prepareDataPushButton.clicked.connect(self.exportDB)
         self.ui.dbListComboBox.currentIndexChanged[str].connect(self.initConnection)
+        self.exportDbDone.connect(self.prepareCache)
         
         self.comuniModel = QStandardItemModel()
         self.selectedCouniModel = QStandardItemModel()
@@ -232,7 +237,7 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         return
 
 
-    def prepareData(self):
+    def exportDb___(self):
         try:
             QApplication.setOverrideCursor(Qt.WaitCursor)
             self.exportDB()
@@ -245,7 +250,6 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
             raise e
         finally:
             QApplication.restoreOverrideCursor()
-
 
     def reloadCrs(self):
         self.srid = self.getSridFromConf()
@@ -272,30 +276,41 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         
         self.showMessage(self.tr("Esporta base di dati geografica %s" % self.destinationDBFileName), QgsMessageLog.INFO)
         
-        # launch time spending activity
-        exportDBThread = ExportDBThread(self.cursor, selectedComuni, self.destinationDBFileName)
-        exportDBThread.procDone.connect(self.exportDBTerminated)
-        exportDBThread.procMessage.connect(self.showMessage)
-        exportDBThread.start()
-         
-        # update progres bar until termination
-        i=0
-        while ( not exportDBThread.isFinished() and not self.manageClose ):
-            self.ui.progressBar.setValue(i)
-            i = (i % 100)+1
-            # necessary to process events, otherwise they are processed all toghether at the end
-            qApp.processEvents()
-            time.sleep(0.1)
-         
-        # check if to manage thread closing
-        if self.manageClose:
-            self.ui.logLabel.setText("Terminando l'export... attendere")
-            exportDBThread.smoothlyStop()
-         
-        while ( exportDBThread.isRunning() ):
-            qApp.processEvents()
-            time.sleep(0.1)
-            continue;
+        try:
+            QApplication.setOverrideCursor(Qt.WaitCursor)
+
+            # launch time spending activity
+            exportDBThread = ExportDBThread(self.cursor, selectedComuni, self.destinationDBFileName)
+            exportDBThread.procDone.connect(self.exportDBTerminated)
+            exportDBThread.procMessage.connect(self.showMessage)
+            exportDBThread.start()
+             
+            # update progres bar until termination
+            i=0
+            while ( not exportDBThread.isFinished() and not self.manageClose ):
+                self.ui.progressBar.setValue(i)
+                i = (i % 100)+1
+                # necessary to process events, otherwise they are processed all toghether at the end
+                qApp.processEvents()
+                time.sleep(0.1)
+             
+            # check if to manage thread closing
+            if self.manageClose:
+                self.ui.logLabel.setText("Terminando l'export... attendere")
+                exportDBThread.smoothlyStop()
+             
+            while ( exportDBThread.isRunning() ):
+                qApp.processEvents()
+                time.sleep(0.1)
+                continue;
+            
+        except Exception as e:
+            traceback.print_exc()
+            QMessageBox.critical(self, "", self.tr("ExportDB fallito! Verifica la finestra di Log"))
+            QApplication.setOverrideCursor(Qt.WaitCursor)
+            raise e
+        finally:
+            QApplication.restoreOverrideCursor()
         
         print "terminated exportDB"
 
@@ -322,48 +337,58 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         # get the CRS from CONF and set the canvas CRS
         #self.reloadCrs()
         
-        # load layers
-        #self.offlineMode = False
-        self.wmsLayersBridge = WmsLayersBridge(self.iface, self.showMessage)
-        firstTime = True
-        if not DlgWmsLayersManager.loadWmsLayers(firstTime): # static method
-            raise Exception("RT Geosisma", "Impossibile caricare i layer richiesti dal database selezionato")
-        
-        # reload the canvas CRS, the first added layer could have changed it
-        #self.reloadCrs()
-        
-        # save layers in cache
-        firstTime = False
-        #self.offlineMode = True
-        
-        # get extent (BBOX) of the selected comuni from the exported DB
-        # this step seems doesn't have effect :(
-        sridextent = self.getExtentAndSrid()
-        if sridextent != None:
-            srid, xmin, ymin, xmax, ymax = sridextent
-            #print "db srid=",srid, "bbox=",xmin, ymin, xmax, ymax
-            # trasform bbox in current srid
-            rect = QgsRectangle(xmin, ymin, xmax, ymax)
-            crsSrc = QgsCoordinateReferenceSystem(srid)    # WGS 84
-            crsDest = QgsCoordinateReferenceSystem(DEFAULT_SRID)  # WGS 84 / UTM zone 33N
-            xform = QgsCoordinateTransform(crsSrc, crsDest)
-            currentRect = xform.transformBoundingBox(rect)
-            print "current srid=",DEFAULT_SRID, "bbox=",currentRect.xMinimum(), currentRect.yMinimum(), currentRect.xMaximum(), currentRect.yMaximum()
-            # set extent to the selected comuni BBOX
-            self.canvas.setExtent(currentRect)
-        
-        # hide progress bar because it's already present in DlgWmsLayersManager
-        self.ui.progressBar.hide()
-        wmsManager = DlgWmsLayersManager(self.iface, self.wmsLayersBridge, self)
-        wmsManager.exec_()
+        try:
+            QApplication.setOverrideCursor(Qt.WaitCursor)
+            # load layers
+            #self.offlineMode = False
+            self.wmsLayersBridge = WmsLayersBridge(self.iface, self.showMessage)
+            firstTime = True
+            if not DlgWmsLayersManager.loadWmsLayers(firstTime): # static method
+                raise Exception("RT Geosisma", "Impossibile caricare i layer richiesti dal database selezionato")
+            
+            # reload the canvas CRS, the first added layer could have changed it
+            #self.reloadCrs()
+            
+            # save layers in cache
+            firstTime = False
+            #self.offlineMode = True
+            
+            # get extent (BBOX) of the selected comuni from the exported DB
+            # this step seems doesn't have effect :(
+            sridextent = self.getExtentAndSrid()
+            if sridextent != None:
+                srid, xmin, ymin, xmax, ymax = sridextent
+                #print "db srid=",srid, "bbox=",xmin, ymin, xmax, ymax
+                # trasform bbox in current srid
+                rect = QgsRectangle(xmin, ymin, xmax, ymax)
+                crsSrc = QgsCoordinateReferenceSystem(srid)    # WGS 84
+                crsDest = QgsCoordinateReferenceSystem(DEFAULT_SRID)  # WGS 84 / UTM zone 33N
+                xform = QgsCoordinateTransform(crsSrc, crsDest)
+                currentRect = xform.transformBoundingBox(rect)
+                print "current srid=",DEFAULT_SRID, "bbox=",currentRect.xMinimum(), currentRect.yMinimum(), currentRect.xMaximum(), currentRect.yMaximum()
+                # set extent to the selected comuni BBOX
+                self.canvas.setExtent(currentRect)
+            
+            # hide progress bar because it's already present in DlgWmsLayersManager
+            self.ui.progressBar.hide()
+            wmsManager = DlgWmsLayersManager(self.iface, self.wmsLayersBridge, self)
+            wmsManager.exec_()
+    
+            # reset previous rederer config 
+            self.canvas.setRenderFlag( prevRenderFlag )
+            # restore the raster legend icons creation
+            settings.setValue("/qgis/createRasterLegendIcons", prevRasterIcons)
+    
+            self.ui.logLabel.setText(self.tr(""))
+            QMessageBox.information(self, "", self.tr("Preparazione dati avvenuta con successo"))
 
-        # reset previous rederer config 
-        self.canvas.setRenderFlag( prevRenderFlag )
-        # restore the raster legend icons creation
-        settings.setValue("/qgis/createRasterLegendIcons", prevRasterIcons)
-
-        self.ui.logLabel.setText(self.tr(""))
-        QMessageBox.information(self, "", self.tr("Preparazione dati avvenuta con successo"))
+        except Exception as e:
+            traceback.print_exc()
+            QMessageBox.critical(self, "", self.tr("Preparazione cache fallita! Verifica la finestra di Log"))
+            QApplication.setOverrideCursor(Qt.WaitCursor)
+            raise e
+        finally:
+            QApplication.restoreOverrideCursor()
 
     def getExtentAndSrid(self):
         
@@ -405,7 +430,10 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
             #QMessageBox.information(self, "", self.tr("Export avvenuto con successo"))
         else:
             QMessageBox.critical(self, "", self.tr("Export fallito. Verifica la finestra di Log"))
-
+        
+        # notify termination
+        self.exportDbDone.emit(val)
+        
     def manageClosecCallback(self):
         self.manageClose = True
 
