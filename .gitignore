@@ -1,3 +1,4 @@
 *.pyc
 help/build/*
 *_ui.py
+rt_geosisma_preparacache.zip
