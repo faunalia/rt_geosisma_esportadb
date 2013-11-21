@@ -1,2 +1,3 @@
 *.pyc
 help/build/*
+*_ui.py
