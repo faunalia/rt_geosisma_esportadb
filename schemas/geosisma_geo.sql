@@ -73,7 +73,7 @@ CREATE TABLE istat_loc
   cod_com text NOT NULL,
   cod_loc text NOT NULL,
   loc2001 text,
-  altitudine double precision,
+  altitudine real,
   denom_pro text,
   denom_com text,
   sigla_prov text,
@@ -89,29 +89,55 @@ SELECT CreateSpatialIndex('istat_loc', 'the_geom');
   
 -------------------------------------------------------------------
 
-CREATE TABLE catasto_2010
+CREATE TABLE fab_catasto
 (
-	gid integer NOT NULL,
-	valenza text,
-	esterconf text,
-	codbo text,
-	tipo text,
-	dim real,
-	ang real,
-	posx real,
-	posy real,
-	pintx real,
-	pinty real,
-	sup real,
-	belfiore text,
-	zona_cens text,
-	foglio text,
-	allegato text,
-	sviluppo text,
-	fog_ann text,
-	orig text,
-	label text ,
-	CONSTRAINT catasto_2010_pkey PRIMARY KEY (gid)
+  gid integer NOT NULL,
+  valenza text,
+  esterconf text,
+  codbo text,
+  tipo text,
+  dim real,
+  ang real,
+  posx real,
+  posy real,
+  pintx real,
+  pinty real,
+  sup real,
+  belfiore text,
+  zona_cens text,
+  foglio text,
+  allegato text,
+  sviluppo text,
+  fog_ann text,
+  orig text,
+  CONSTRAINT fab_catasto_pkey PRIMARY KEY (gid)
 );
-SELECT AddGeometryColumn( 'catasto_2010', 'the_geom', 32632, 'MULTIPOLYGON', 'XY');
-SELECT CreateSpatialIndex('catasto_2010', 'the_geom');
+SELECT AddGeometryColumn( 'fab_catasto', 'the_geom', 32632, 'MULTIPOLYGON', 'XY');
+SELECT CreateSpatialIndex('fab_catasto', 'the_geom');
+
+------------------------------------------------------------------------
+
+CREATE TABLE fab_10k
+(
+  gid integer NOT NULL,
+  fid_1 integer,
+  foglio text,
+  codice text,
+  record integer,
+  topon text,
+  area real,
+  identif text,
+  cod_com text,
+  fid_2 integer,
+  area_1 numeric,
+  perimeter numeric,
+  comune_ integer,
+  comune_id integer,
+  codistat91 text,
+  provincia text,
+  nomemai text,
+  nomemin text,
+  CONSTRAINT fab_10k_pkey PRIMARY KEY (gid)
+);
+SELECT AddGeometryColumn( 'fab_10k', 'the_geom', 32632, 'MULTIPOLYGON', 'XY');
+SELECT CreateSpatialIndex('fab_10k', 'the_geom');

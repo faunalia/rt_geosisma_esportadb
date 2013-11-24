@@ -91,11 +91,11 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         self.ui.buttonBox.rejected.connect(self.manageClosecCallback)
         #self.createDB()
         # populate db
-#         selectedComuni = [{u'idprovincia': u'045', u'id_istat': u'004', u'toponimo': u'Casola in Lunigiana'}]
-#         item = QStandardItem( selectedComuni[0]["toponimo"] )
-#         item.setData( selectedComuni[0]  )
-#         self.selectedCouniModel.appendRow(item)
-#         self.ui.selectedComuniListView.setModel(self.selectedCouniModel)
+        selectedComuni = [{u'idprovincia': u'045', u'id_istat': u'004', u'toponimo': u'Casola in Lunigiana'}]
+        item = QStandardItem( selectedComuni[0]["toponimo"] )
+        item.setData( selectedComuni[0]  )
+        self.selectedCouniModel.appendRow(item)
+        self.ui.selectedComuniListView.setModel(self.selectedCouniModel)
         #self.populateDB(selectedComuni)
         #self.ui.comuniListView.setSelectionMode(QAbstractItemView.MultiSelection)
         #self.ui.selectedComuniListView.setSelectionMode(QAbstractItemView.MultiSelection)
@@ -265,7 +265,9 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
 
     def exportDB(self):
         print "started exportDB"
-        self.terminatedExportDb = False # set true only if successfully finished
+
+        if self.manageClose:
+            return
         
         if self.selectedCouniModel.rowCount() == 0:
             return
@@ -315,9 +317,15 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         print "terminated exportDB"
 
 
-    def prepareCache(self):
+    def prepareCache(self, success=True):
         ''' prepare cache reuse DlgWmsLayersManager from rt_omero plugin with just slight modifications '''
         print "prepareCache"
+
+        if not success:
+            return
+        if self.manageClose:
+            return
+
         if self.selectedCouniModel.rowCount() == 0:
             return
         # get list of selected Comuni
@@ -398,16 +406,16 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
             Min(MbrMinX(the_geom)), Min(MbrMinY(the_geom)),
             Max(MbrMaxX(the_geom)), Max(MbrMaxY(the_geom))
         FROM
-            catasto_2010, geometry_columns
+            fab_catasto, geometry_columns
         WHERE
-            geometry_columns.f_table_name = 'catasto_2010';
+            geometry_columns.f_table_name = 'fab_catasto';
         """
         
         spliteconn = db.connect(self.destinationDBFileName)
         rs = spliteconn.cursor().execute(sqlquery)
         rows = rs.fetchall()
         if (rows.__len__() != 1):
-            self.showMessage(self.tr("Non riesco a determinare l'extent della tablella catasto_2010"), QgsMessageLog.WARNING)
+            self.showMessage(self.tr("Non riesco a determinare l'extent della tablella fab_catasto"), QgsMessageLog.WARNING)
             return None
             
         return rows[0]
@@ -418,13 +426,11 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         self.ui.logLabel.setText(message)
 
 
-    def exportDBTerminated(self, val):
-        self.terminatedExportDb = val
-        
+    def exportDBTerminated(self, success):
         if self.manageClose:
             return
         
-        if self.terminatedExportDb:
+        if success:
             self.ui.progressBar.setValue(100)
             self.ui.logLabel.setText(self.tr("Export del DB avvenuto con successo... preparazione cache. Attendere!"))
             #QMessageBox.information(self, "", self.tr("Export avvenuto con successo"))
@@ -432,7 +438,7 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
             QMessageBox.critical(self, "", self.tr("Export fallito. Verifica la finestra di Log"))
         
         # notify termination
-        self.exportDbDone.emit(val)
+        self.exportDbDone.emit(success)
         
     def manageClosecCallback(self):
         self.manageClose = True
