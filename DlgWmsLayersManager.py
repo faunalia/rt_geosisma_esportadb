@@ -89,16 +89,15 @@ class DlgWmsLayersManager(DlgWaiting):
 		prevRasterIcons = settings.value("/qgis/createRasterLegendIcons", True, bool)
 		settings.setValue("/qgis/createRasterLegendIcons", False)
 
-
 		# backup %cache% folder (move it to %cache%.old)
 		# then remove it only if the process ends successfully
 		cache_path = WmsLayersBridge.getPathToCache()
 		dircache = QDir(cache_path)
-	
+		
 		dircache_name = dircache.dirName()
 		if dircache.cd( ".." ) and dircache.rename(dircache_name, u"%s.old" % dircache_name):
 			dircache.mkdir( dircache_name )
-
+		
 		# store current zoom
 		prevScale = self.canvas.scale()
 		# get central point
@@ -108,6 +107,7 @@ class DlgWmsLayersManager(DlgWaiting):
 		# dump the wms layers' info from online repository to cache file
 		layersinfo = self.retrieveWmsLayerList()
 		wmslistfn = QDir(cache_path).absoluteFilePath("zz_wms.list.txt")
+		
 		with open(unicode(wmslistfn), 'w') as f:
 			if layersinfo is not None:
 				import json
@@ -654,7 +654,11 @@ class WmsLayersBridge:
 	@classmethod
 	def getPathToCache(self):
 		settings = QSettings()
-		return settings.value( "/rt_geosisma_preparacache/pathToCache", "" )
+		cachepath = settings.value( "/rt_geosisma_preparacache/pathToCache", "" )
+		if len(cachepath) > 0:
+			if cachepath[-1] == "/":
+				cachepath = cachepath[:-1]
+		return cachepath
 	
 	
 	@classmethod
