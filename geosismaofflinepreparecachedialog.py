@@ -282,7 +282,7 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
             QApplication.setOverrideCursor(Qt.WaitCursor)
 
             # launch time spending activity
-            exportDBThread = ExportDBThread(self.cursor, selectedComuni, self.destinationDBFileName)
+            exportDBThread = ExportDBThread(self.connection, selectedComuni, self.destinationDBFileName)
             exportDBThread.procDone.connect(self.exportDBTerminated)
             exportDBThread.procMessage.connect(self.showMessage)
             exportDBThread.start()

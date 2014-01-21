@@ -35,9 +35,10 @@ class ExportDBThread(QThread):
     procDone = pyqtSignal(bool)
     procMessage = pyqtSignal(str, int)
 
-    def __init__(self, pgcursor, selectedComuni, outDb):
+    def __init__(self, pgconnection, selectedComuni, outDb):
         QThread.__init__(self)
-        self.cursor = pgcursor
+        self.pgconnection = pgconnection
+        self.cursor = pgconnection.cursor()
         self.selectedComuni = selectedComuni
         self.stopThread = False
         self.DATABASE_NAME = os.path.splitext( os.path.basename(outDb) )[0]
@@ -128,9 +129,14 @@ class ExportDBThread(QThread):
             return
 
         try:
+            if (not self.cursor.closed):
+                print "close cursor and reopen"
+                self.cursor.close()
+            self.cursor = self.pgconnection.cursor()
+            
             self.procMessage.emit("Copia tabella: "+tableName, QgsMessageLog.INFO)
             # get PostGIS values
-            sqlquery = u"SELECT * FROM "+tableName
+            sqlquery = u"SELECT * FROM "+tableName+";"
             self.cursor.execute( sqlquery )
             # create query string
             fields = ['?'] * self.cursor.description.__len__() # create a list of ['?', '?', '?', '?', '?', '?', '?', '?', '?', '?']
