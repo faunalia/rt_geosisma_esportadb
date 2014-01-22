@@ -62,8 +62,8 @@ CREATE TABLE istat_loc_tipi
 CREATE TABLE istat_loc
 (
   id integer NOT NULL,
-  denom_loc text NOT NULL,
-  centro_cl boolean NOT NULL,
+  denom_loc text,
+  centro_cl boolean,
   popres integer NOT NULL,
   maschi integer NOT NULL,
   famiglie integer NOT NULL,
