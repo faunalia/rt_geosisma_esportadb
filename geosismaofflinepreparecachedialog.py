@@ -123,7 +123,9 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
 
         # SET outs
         self.destinationDBFileName = os.path.join(self.destinationPathName, CACHE_DB_SUBDIR, SPLITE_DATABASE_NAME)
-        self.destinationCachePath = os.path.join(self.destinationPathName, CACHE_LAYERS_SUBDIRS, SPLITE_DATABASE_NAME)
+        self.destinationCachePath = os.path.join(self.destinationPathName, CACHE_LAYERS_SUBDIRS)
+        if WmsLayersBridge.getPathToCache() == "":
+            WmsLayersBridge.setPathToCache(self.destinationCachePath)
 
     def selectDestinationsPath(self):
         self.destinationPathName = QFileDialog.getExistingDirectory(self, self.tr("Seleziona un Path"), self.destinationPathName)
@@ -132,7 +134,7 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         self.destinationDBFileName = os.path.join(self.destinationPathName, CACHE_DB_SUBDIR, SPLITE_DATABASE_NAME)
         
         # set layer cache path
-        self.destinationCachePath = os.path.join(self.destinationPathName, CACHE_LAYERS_SUBDIRS, SPLITE_DATABASE_NAME)
+        self.destinationCachePath = os.path.join(self.destinationPathName, CACHE_LAYERS_SUBDIRS)
         WmsLayersBridge.setPathToCache(self.destinationCachePath)
 
 
