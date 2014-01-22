@@ -185,13 +185,15 @@ class ExportDBThread(QThread):
             for record in self.cursor.fetchall():
                 # modify geompetry element
                 valuesDict = OrderedDict(zip(columnames,record))
-                for column in columnames:
-                    if column == "the_geom":
-                        valuesDict["the_geom"] = "GeomFromText('%s',%d)" % (valuesDict["the_geom"], DATABASE_SRID)
-                    else:
-                        valuesDict[column] = json.dumps( unicode( valuesDict[column] ) )
-                newsql = sql + "(" +",".join( valuesDict.values() ) + ")"
-                spliteconn.cursor().execute(newsql)
+                #valuesDict["the_geom"] = "GeomFromText('%s',%d)" % (valuesDict["the_geom"], DATABASE_SRID)
+
+                fields = ['?'] * valuesDict.__len__() # create a list of ['?', '?', '?', '?', '?', '?', '?', '?', '?', '?']
+                
+                index = valuesDict.keys().index("the_geom")
+                fields[index] = "GeomFromText( ? ,%d)" % DATABASE_SRID
+                newsql = sql + "( " + ",".join(fields) + " );"
+                #newsql = sql + "(" +",".join( valuesDict.values() ) + ")"
+                spliteconn.cursor().execute(newsql, tuple(valuesDict.values()))
                 
                 if self.stopThread:
                     return
