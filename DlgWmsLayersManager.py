@@ -10,11 +10,12 @@ modified             : (C) 2013 by Luigi Pirelli (Faunalia)
 email                : sucameli@faunalia.it - luigi.pirelli@faunalia.it
  ***************************************************************************/
 
-This code has been extracted from rt omero plugin to be resused in rt geosisma offline plugin
+This code has been extracted and modified from rt_omero plugin to be resused in 
+rt_geosisma_preparacache plugin
 
-Omero plugin
+Geosisma Plugin
 Works done from Faunalia (http://www.faunalia.it) with funding from Regione 
-Toscana - S.I.T.A. (http://www.regione.toscana.it/territorio/cartografia/index.html)
+Toscana - Servizio Sismico (http://www.rete.toscana.it/sett/pta/sismica/)
 
 /***************************************************************************
  *                                                                         *

@@ -9,9 +9,12 @@ copyright            : (C) 2011 by Giuseppe Sucameli (Faunalia)
 email                : sucameli@faunalia.it
  ***************************************************************************/
 
-Omero plugin
+This code has been extracted and modified from rt_omero plugin to be resused in 
+rt_geosisma_preparacache plugin
+
+Geosisma Plugin
 Works done from Faunalia (http://www.faunalia.it) with funding from Regione 
-Toscana - S.I.T.A. (http://www.regione.toscana.it/territorio/cartografia/index.html)
+Toscana - Servizio Sismico (http://www.rete.toscana.it/sett/pta/sismica/)
 
 /***************************************************************************
  *                                                                         *
