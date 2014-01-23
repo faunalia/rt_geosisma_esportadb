@@ -92,12 +92,9 @@ class ExportDBThread(QThread):
 
         # connect spatialite db
         conn = db.connect(self.DATABASE_OUTNAME)
-        print self.DATABASE_OUTNAME
-        
-        
         try:
             # copy tables
-            tables = ["istat_regioni", "istat_province", "istat_comuni", "codici_belfiore", "istat_loc_tipi"]
+            tables = ["istat_regioni", "istat_province", "codici_belfiore", "istat_loc_tipi", "istat_comuni"]
             for table in tables:
                 self.copyTable(conn, table)
              
@@ -108,12 +105,10 @@ class ExportDBThread(QThread):
              
             # get fab_catasto poligons only related to selectedComuni
             for comune in selectedComuni:
-                print "exporting fields for: ", comune["toponimo"], "..."
                 self.copyCatastoPolygons(conn, comune)
             
             # get fab_10k poligons only related to selectedComuni
             for comune in selectedComuni:
-                print "exporting fields for: ", comune["toponimo"], "..."
                 self.copyFab10kPolygons(conn, comune)
             
             #commit population
@@ -130,7 +125,6 @@ class ExportDBThread(QThread):
 
         try:
             if (not self.cursor.closed):
-                print "close cursor and reopen"
                 self.cursor.close()
             self.cursor = self.pgconnection.cursor()
             
