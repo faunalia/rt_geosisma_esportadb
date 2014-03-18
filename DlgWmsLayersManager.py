@@ -89,7 +89,7 @@ class DlgWmsLayersManager(DlgWaiting):
 		settings = QSettings()
 		prevRasterIcons = settings.value("/qgis/createRasterLegendIcons", True, bool)
 		settings.setValue("/qgis/createRasterLegendIcons", False)
-
+		
 		# backup %cache% folder (move it to %cache%.old)
 		# then remove it only if the process ends successfully
 		cache_path = WmsLayersBridge.getPathToCache()
@@ -239,6 +239,7 @@ class DlgWmsLayersManager(DlgWaiting):
 					settings = QSettings()
 					oldProjectionBehaviour = settings.value( "/Projections/defaultBehaviour", "prompt", str )
 					settings.setValue( "/Projections/defaultBehaviour", "useProject" )
+
 					# add the offline layer
 					try:
 						layer = self.iface.addRasterLayer( out_path, "CACHED - %s" % name )
@@ -649,7 +650,9 @@ class WmsLayersBridge:
 	@classmethod
 	def setPathToCache(self, cachepath):
 		settings = QSettings()
-		return settings.setValue( "/rt_geosisma_preparacache/pathToCache", cachepath )
+		settings.setValue( "/rt_geosisma_preparacache/pathToCache", cachepath )
+		settings.sync()
+		return 
 	
 	
 	@classmethod
@@ -693,6 +696,7 @@ class WmsLayersBridge:
 	def setCachedExternalWms(self, value):
 		settings = QSettings()
 		settings.setValue( "/rt_geosisma_preparacache/cachedExternalWms", value )
+		settings.sync()
 	
 	
 	@classmethod

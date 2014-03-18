@@ -131,6 +131,7 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         self.destinationPathName = QFileDialog.getExistingDirectory(self, self.tr("Seleziona un Path"), self.destinationPathName)
         
         self.settings.setValue("/rt_geosisma_preparacache/destinationPathName", self.destinationPathName)
+        self.settings.sync()
         self.destinationDBFileName = os.path.join(self.destinationPathName, CACHE_DB_SUBDIR, SPLITE_DATABASE_NAME)
         
         # set layer cache path
