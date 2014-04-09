@@ -13,8 +13,8 @@ name=RT Geosisma Prepara Cache
 qgisMinimumVersion=2.0
 description=Prepara la cache di layer WMS per il funzionamento offline di rt_geosisma_offline
 version=0.3
-author=Luigi Pirelli
-email=luipir@gmail.com
+author=Luigi Pirelli (luipir@gmail.com)
+email=info@faunalia.eu
 
 # end of mandatory metadata
 
@@ -37,9 +37,9 @@ email=luipir@gmail.com
 # tags are comma separated with spaces allowed
 tags=Geosisma, Regione Toscana, Offline, cache, Servizio Sismico
 
-homepage=
-tracker=
-repository=
+homepage=http://www.faunalia.eu/
+tracker=https://trac.faunalia.it/geosisma/report
+repository=https://github.com/faunalia/rt_geosisma_preparacache
 icon=icon.png
 # experimental flag
 experimental=True
