@@ -117,6 +117,7 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         #self.destinationDBFileName = os.path.join(plugin_path, GEOSISMA_OFFLINE_PLUGIN_NAME, "dbs", DATABASE_NAME+".sqlite")
         self.destinationPathName = os.path.join(plugin_path, GEOSISMA_OFFLINE_PLUGIN_NAME, "offlinedata")
         self.destinationPathName = settings.value("/rt_geosisma_preparacache/destinationPathName", self.destinationPathName)
+        #self.settings.setValue("/rt_geosisma_preparacache/destinationPathName", self.destinationPathName)
         
         self.ui.selectOutPathPushButton.setText( self.destinationPathName )
         self.ui.selectOutPathPushButton.clicked.connect(self.selectDestinationsPath)
@@ -129,7 +130,8 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
 
     def selectDestinationsPath(self):
         self.destinationPathName = QFileDialog.getExistingDirectory(self, self.tr("Seleziona un Path"), self.destinationPathName)
-        
+        self.ui.selectOutPathPushButton.setText( self.destinationPathName )
+
         self.settings.setValue("/rt_geosisma_preparacache/destinationPathName", self.destinationPathName)
         self.settings.sync()
         self.destinationDBFileName = os.path.join(self.destinationPathName, CACHE_DB_SUBDIR, SPLITE_DATABASE_NAME)
@@ -274,6 +276,40 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         
         if self.selectedCouniModel.rowCount() == 0:
             return
+
+        # check preconditions
+        # check destination path and db exists
+        if not os.path.exists(self.destinationPathName):
+            QMessageBox.critical(self, "", self.tr("Path di destinazione inesistente: %s" % self.destinationPathName))
+            return
+        if not os.path.isdir(self.destinationPathName):
+            QMessageBox.critical(self, "", self.tr("Path di destinazione non e' una directory: %s" % self.destinationPathName))
+            return
+        if not os.access(self.destinationPathName, os.X_OK):
+            QMessageBox.critical(self, "", self.tr("Non hai permessi di scrittura sul Path di destinazione: %s" % self.destinationPathName))
+            return
+        
+        dbpath = os.path.join(self.destinationPathName, CACHE_DB_SUBDIR)
+        if not os.path.exists(dbpath):
+            QMessageBox.critical(self, "", self.tr("Non trovo la directory: %s" % dbpath))
+            return
+        if not os.path.isdir(dbpath):
+            QMessageBox.critical(self, "", self.tr("%s non e' una directory" % dbpath))
+            return
+        if not os.access(dbpath, os.X_OK | os.W_OK):
+            QMessageBox.critical(self, "", self.tr("Non hai permessi di scrittura in: %s " % dbpath))
+            return
+
+        if not os.path.exists(self.destinationCachePath):
+            QMessageBox.critical(self, "", self.tr("Non trovo la directory: %s" % self.destinationCachePath))
+            return
+        if not os.path.isdir(self.destinationCachePath):
+            QMessageBox.critical(self, "", self.tr("%s non e' una directory" % self.destinationCachePath))
+            return
+        if not os.access(self.destinationCachePath, os.X_OK | os.W_OK):
+            QMessageBox.critical(self, "", self.tr("Non hai permessi di scrittura in: %s " % self.destinationCachePath))
+            return
+        
         # get list of selected Comuni
         selectedComuni = []
         for idx in range(self.selectedCouniModel.rowCount()):
@@ -331,6 +367,7 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
 
         if self.selectedCouniModel.rowCount() == 0:
             return
+        
         # get list of selected Comuni
         selectedComuni = []
         for idx in range(self.selectedCouniModel.rowCount()):
