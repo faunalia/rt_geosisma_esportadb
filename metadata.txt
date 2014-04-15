@@ -12,7 +12,7 @@
 name=RT Geosisma Prepara Cache
 qgisMinimumVersion=2.0
 description=Prepara la cache di layer WMS per il funzionamento offline di rt_geosisma_offline
-version=0.3.1
+version=0.3.2
 author=Luigi Pirelli (luipir@gmail.com)
 email=info@faunalia.eu
 
@@ -21,7 +21,10 @@ email=info@faunalia.eu
 # Optional items:
 
 # Uncomment the following line and add your changelog entries:
-# changelog=0.3.1
+# changelog=0.3.2
+	Aggiunta possibilita' di NON scaricare i WMS - #466
+	Velocizzata la creazione del DB con spatialite 4
+	0.3.1
 	bug fix #464 e aggiunto maggiore controllo ai path di destinazione
 	0.3
 	Default elenco WMS scaricato dal sito geosisma
