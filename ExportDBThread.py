@@ -77,6 +77,13 @@ class ExportDBThread(QThread):
             geosisma_geo_schema += fs.read()
         # connect spatialite db
         conn = db.connect(self.DATABASE_OUTNAME)
+        
+        # create spatial metadata... depending on SL3 or SL4
+        try:
+            conn.cursor().execute("SELECT InitSpatialMetadata(1);")
+        except:
+            conn.cursor().execute("SELECT InitSpatialMetadata();")
+
         # create DB
         try:
             self.procMessage.emit("Inizializza il DB Spatialite temporaneo", QgsMessageLog.INFO)
