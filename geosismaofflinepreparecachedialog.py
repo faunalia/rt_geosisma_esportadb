@@ -23,7 +23,7 @@ import time, os, inspect, traceback
 from qgis.core import *
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from dlgSelectProvinciaComuni import Ui_DlgSelectProvinciaComuni
+from dlgSelectProvinciaComuni_ui import Ui_DlgSelectProvinciaComuni
 from ExportDBThread import ExportDBThread
 from DlgWmsLayersManager import DlgWmsLayersManager, WmsLayersBridge
 
@@ -359,10 +359,17 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
     def prepareCache(self, success=True):
         ''' prepare cache reuse DlgWmsLayersManager from rt_omero plugin with just slight modifications '''
         print "prepareCache"
-
+        
         if not success:
             return
         if self.manageClose:
+            return
+
+        # check if prepara chache flag is set
+        if not self.ui.exportWmsCheckBox.isChecked():
+            QApplication.restoreOverrideCursor()
+            self.ui.logLabel.setText(self.tr(""))
+            QMessageBox.information(self, "", self.tr("Preparazione dati avvenuta con successo"))
             return
 
         if self.selectedCouniModel.rowCount() == 0:

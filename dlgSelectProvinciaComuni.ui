@@ -122,11 +122,25 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="prepareDataPushButton">
-       <property name="text">
-        <string>Prepara dati Offline</string>
-       </property>
-      </widget>
+      <layout class="QFormLayout" name="formLayout_2">
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="exportWmsCheckBox">
+         <property name="text">
+          <string>WMS</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QPushButton" name="prepareDataPushButton">
+         <property name="text">
+          <string>Prepara dati Offline</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <widget class="QProgressBar" name="progressBar">
