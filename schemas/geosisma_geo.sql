@@ -1,5 +1,3 @@
-SELECT InitSpatialMetadata();
-
 -------------------------------------------------------------------
 
 CREATE TABLE istat_regioni
