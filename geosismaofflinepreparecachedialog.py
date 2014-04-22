@@ -252,6 +252,7 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         except Exception as e:
             traceback.print_exc()
             QMessageBox.critical(self, "", self.tr("Preparazioen dati fallita. Verifica la finestra di Log"))
+            QApplication.restoreOverrideCursor()
             raise e
         finally:
             QApplication.restoreOverrideCursor()
@@ -348,7 +349,7 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         except Exception as e:
             traceback.print_exc()
             QMessageBox.critical(self, "", self.tr("ExportDB fallito! Verifica la finestra di Log"))
-            QApplication.setOverrideCursor(Qt.WaitCursor)
+            QApplication.restoreOverrideCursor()
             raise e
         finally:
             QApplication.restoreOverrideCursor()
@@ -440,7 +441,7 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         except Exception as e:
             traceback.print_exc()
             QMessageBox.critical(self, "", self.tr("Preparazione cache fallita! Verifica la finestra di Log"))
-            QApplication.setOverrideCursor(Qt.WaitCursor)
+            QApplication.restoreOverrideCursor()
             raise e
         finally:
             QApplication.restoreOverrideCursor()
