@@ -144,14 +144,15 @@ SELECT CreateSpatialIndex('fab_10k', 'the_geom');
 
 CREATE TABLE fab_10k_mod
 (
-  "gid"         integer NOT NULL PRIMARY KEY,
+  "local_gid"   integer NOT NULL, -- chiave primaria nel db locale
+  "gid"         integer NOT NULL, -- chiave primaria del record nel db remoto
   "identif"     text, -- aggregato identifier
   "fab_10k_gid" integer, -- source fab_10k record fk
   "mod_time"    date, -- client side modification datetime
   "team_id"     text, -- team identifier as API URL
   "upload_time" date, -- upload datetime
-  CONSTRAINT fab_10k_mod_pkey PRIMARY KEY (gid)
-)
+  CONSTRAINT fab_10k_mod_pkey PRIMARY KEY (local_gid)
+);
 SELECT AddGeometryColumn( 'fab_10k_mod', 'the_geom', 32632, 'MULTIPOLYGON', 'XY');
 SELECT CreateSpatialIndex('fab_10k_mod', 'the_geom');
 
