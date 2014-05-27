@@ -46,12 +46,12 @@ SPLITE_DATABASE_NAME = DATABASE_NAME+".sqlite"
 CACHE_DB_SUBDIR = "dbs"
 CACHE_LAYERS_SUBDIRS = "layers"
 
-MESSAGELOG_CLASS = "rt_geosisma_preparacache"
+MESSAGELOG_CLASS = "rt_geosisma_inizializzaevento"
 GEOSISMA_OFFLINE_PLUGIN_NAME = "rt_geosisma_offline"
 DEFAULT_SRID = 3003
 # DEFAULT_SRID = 32632
 
-class GeosismaOfflinePrepareCacheDialog(QDialog):
+class GeosismaOfflineInizializzaEventoDialog(QDialog):
 
     RLID_WMS = {} # probably unuseful
     instance = None
@@ -62,7 +62,7 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
 
     def __init__(self, iface):
         QDialog.__init__(self)
-        GeosismaOfflinePrepareCacheDialog.instance = self
+        GeosismaOfflineInizializzaEventoDialog.instance = self
         self.iface = iface
         self.canvas = iface.mapCanvas()
         # Set up the user interface from Designer.
@@ -116,8 +116,8 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         plugin_path = os.path.dirname(os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0]))
         #self.destinationDBFileName = os.path.join(plugin_path, GEOSISMA_OFFLINE_PLUGIN_NAME, "dbs", DATABASE_NAME+".sqlite")
         self.destinationPathName = os.path.join(plugin_path, GEOSISMA_OFFLINE_PLUGIN_NAME, "offlinedata")
-        self.destinationPathName = settings.value("/rt_geosisma_preparacache/destinationPathName", self.destinationPathName)
-        #self.settings.setValue("/rt_geosisma_preparacache/destinationPathName", self.destinationPathName)
+        self.destinationPathName = settings.value("/rt_geosisma_inizializzaevento/destinationPathName", self.destinationPathName)
+        #self.settings.setValue("/rt_geosisma_inizializzaevento/destinationPathName", self.destinationPathName)
         
         self.ui.selectOutPathPushButton.setText( self.destinationPathName )
         self.ui.selectOutPathPushButton.clicked.connect(self.selectDestinationsPath)
@@ -132,7 +132,7 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         self.destinationPathName = QFileDialog.getExistingDirectory(self, self.tr("Seleziona un Path"), self.destinationPathName)
         self.ui.selectOutPathPushButton.setText( self.destinationPathName )
 
-        self.settings.setValue("/rt_geosisma_preparacache/destinationPathName", self.destinationPathName)
+        self.settings.setValue("/rt_geosisma_inizializzaevento/destinationPathName", self.destinationPathName)
         self.settings.sync()
         self.destinationDBFileName = os.path.join(self.destinationPathName, CACHE_DB_SUBDIR, SPLITE_DATABASE_NAME)
         
@@ -262,16 +262,10 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
         srs = QgsCoordinateReferenceSystem( self.srid, QgsCoordinateReferenceSystem.EpsgCrsId )
         renderer = self.canvas.mapRenderer()
         self._setRendererCrs(renderer, srs)
-        
-        print "srid = ",self.srid
-        print "mapUnits = ", srs.mapUnits()
-        
         renderer.setMapUnits( srs.mapUnits() if srs.mapUnits() != QGis.UnknownUnit else QGis.Meters )
 
 
     def exportDB(self):
-        print "started exportDB"
-
         if self.manageClose:
             return
         
@@ -353,13 +347,9 @@ class GeosismaOfflinePrepareCacheDialog(QDialog):
             raise e
         finally:
             QApplication.restoreOverrideCursor()
-        
-        print "terminated exportDB"
-
 
     def prepareCache(self, success=True):
         ''' prepare cache reuse DlgWmsLayersManager from rt_omero plugin with just slight modifications '''
-        print "prepareCache"
         
         if not success:
             return

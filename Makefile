@@ -1,5 +1,5 @@
 #/***************************************************************************
-# rt_geosisma_preparacache
+# rt_geosisma_inizializzaevento
 # 
 # Gestione offline delle scede di vulnerabilita' di Geosisma
 #                             -------------------
@@ -24,11 +24,11 @@ PLUGIN_UPLOAD = $(CURDIR)/plugin_upload.py
 
 # global
 
-PLUGINNAME = rt_geosisma_preparacache
+PLUGINNAME = rt_geosisma_inizializzaevento
 
 # translation
 SOURCES = $(wildcard *.py)
-TRANSLATIONS = i18n/rt_geosisma_preparacache_en.ts
+TRANSLATIONS = i18n/rt_geosisma_inizializzaevento_en.ts
 
 EXTRAS = config/ schemas/ AUTHORS.txt LICENSE metadata.txt README.txt
 

@@ -44,7 +44,7 @@ tags=Geosisma, Regione Toscana, Offline, cache, Servizio Sismico
 
 homepage=http://www.faunalia.eu/
 tracker=https://trac.faunalia.it/geosisma/newticket
-repository=https://github.com/faunalia/rt_geosisma_preparacache
+repository=https://github.com/faunalia/rt_geosisma_inizializzaevento
 icon=icon.png
 # experimental flag
 experimental=True

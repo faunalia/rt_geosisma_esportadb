@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/plugins/geosismaofflinepreparecache">
+    <qresource prefix="/plugins/geosismaofflineinizializzaevento">
         <file>icon.png</file>
     </qresource>
 </RCC>

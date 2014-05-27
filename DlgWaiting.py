@@ -10,7 +10,7 @@ email                : sucameli@faunalia.it
  ***************************************************************************/
 
 This code has been extracted and modified from rt_omero plugin to be resused in 
-rt_geosisma_preparacache plugin
+rt_geosisma_inizializzaevento plugin
 
 Geosisma Plugin
 Works done from Faunalia (http://www.faunalia.it) with funding from Regione 

@@ -26,11 +26,11 @@ from qgis.core import *
 # Initialize Qt resources from file resources.py
 import resources_rc
 # Import the code for the dialog
-from geosismaofflinepreparecachedialog import GeosismaOfflinePrepareCacheDialog
+from geosismaofflineinizializzaeventodialog import GeosismaOfflineInizializzaEventoDialog
 import os.path
 
 
-class GeosismaOfflinePrepareCache:
+class GeosismaOfflineInizializzaEvento:
 
     def __init__(self, iface):
         # Save reference to the QGIS interface
@@ -39,7 +39,7 @@ class GeosismaOfflinePrepareCache:
         self.plugin_dir = os.path.dirname(__file__)
         # initialize locale
         locale = QSettings().value("locale/userLocale")[0:2]
-        localePath = os.path.join(self.plugin_dir, 'i18n', 'geosismaofflinepreparecache_{}.qm'.format(locale))
+        localePath = os.path.join(self.plugin_dir, 'i18n', 'geosismaofflineinizializzaevento_{}.qm'.format(locale))
 
         if os.path.exists(localePath):
             self.translator = QTranslator()
@@ -51,24 +51,24 @@ class GeosismaOfflinePrepareCache:
     def initGui(self):
         # Create action that will start plugin configuration
         self.action = QAction(
-            QIcon(":/plugins/geosismaofflinepreparecache/icon.png"),
-            u"RT Geosisma Prepara Cache", self.iface.mainWindow())
+            QIcon(":/plugins/geosismaofflineinizializzaevento/icon.png"),
+            u"RT Geosisma Inizializza Evento", self.iface.mainWindow())
         # connect the action to the run method
         self.action.triggered.connect(self.run)
 
         # Add toolbar button and menu item
         self.iface.addToolBarIcon(self.action)
-        self.iface.addPluginToMenu(u"&RT Geosisma Prepara Cache", self.action)
+        self.iface.addPluginToMenu(u"&RT Geosisma Inizializza Evento", self.action)
 
     def unload(self):
         # Remove the plugin menu item and icon
-        self.iface.removePluginMenu(u"&RT Geosisma Prepara Cache", self.action)
+        self.iface.removePluginMenu(u"&RT Geosisma Inizializza Evento", self.action)
         self.iface.removeToolBarIcon(self.action)
 
     # run method that performs all the real work
     def run(self):
         # Create the dialog (after translation) and keep reference
-        self.dlg = GeosismaOfflinePrepareCacheDialog(self.iface)
+        self.dlg = GeosismaOfflineInizializzaEventoDialog(self.iface)
         # show the dialog
         self.dlg.show()
         # Run the dialog event loop

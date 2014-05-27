@@ -11,7 +11,7 @@ email                : sucameli@faunalia.it - luigi.pirelli@faunalia.it
  ***************************************************************************/
 
 This code has been extracted and modified from rt_omero plugin to be resused in 
-rt_geosisma_preparacache plugin
+rt_geosisma_inizializzaevento plugin
 
 Geosisma Plugin
 Works done from Faunalia (http://www.faunalia.it) with funding from Regione 
@@ -643,14 +643,14 @@ class WmsLayersBridge:
 	@classmethod
 	def getSridFromConf(self):
 		settings = QSettings()
-		srid = settings.value( "/rt_geosisma_preparacache/defaultSrid", 3003 )
+		srid = settings.value( "/rt_geosisma_inizializzaevento/defaultSrid", 3003 )
 		return int( srid )
 	
 	
 	@classmethod
 	def setPathToCache(self, cachepath):
 		settings = QSettings()
-		settings.setValue( "/rt_geosisma_preparacache/pathToCache", cachepath )
+		settings.setValue( "/rt_geosisma_inizializzaevento/pathToCache", cachepath )
 		settings.sync()
 		return 
 	
@@ -658,7 +658,7 @@ class WmsLayersBridge:
 	@classmethod
 	def getPathToCache(self):
 		settings = QSettings()
-		cachepath = settings.value( "/rt_geosisma_preparacache/pathToCache", "" )
+		cachepath = settings.value( "/rt_geosisma_inizializzaevento/pathToCache", "" )
 		if len(cachepath) > 0:
 			if cachepath[-1] == "/":
 				cachepath = cachepath[:-1]
@@ -668,7 +668,7 @@ class WmsLayersBridge:
 	@classmethod
 	def getWMSRepositoryUrl(self):
 		settings = QSettings()
-		return settings.value( "/rt_geosisma_preparacache/wmsRepositoryURL", "http://geosisma-test.faunalia.it/offline/zz_wms.zip" )
+		return settings.value( "/rt_geosisma_inizializzaevento/wmsRepositoryURL", "http://geosisma-test.faunalia.it/offline/zz_wms.zip" )
 	
 	
 	@classmethod
@@ -695,7 +695,7 @@ class WmsLayersBridge:
 	@classmethod
 	def setCachedExternalWms(self, value):
 		settings = QSettings()
-		settings.setValue( "/rt_geosisma_preparacache/cachedExternalWms", value )
+		settings.setValue( "/rt_geosisma_inizializzaevento/cachedExternalWms", value )
 		settings.sync()
 	
 	
