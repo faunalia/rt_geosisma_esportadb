@@ -9,7 +9,7 @@
 
 
 [general]
-name=RT Geosisma Prepara Cache
+name=RT Geosisma Inizializza Evento
 qgisMinimumVersion=2.0
 description=Prepara la cache di layer WMS per il funzionamento offline di rt_geosisma_offline
 version=0.3.4
