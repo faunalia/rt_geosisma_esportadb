@@ -21,7 +21,7 @@ email=info@faunalia.eu
 # Optional items:
 
 # Uncomment the following line and add your changelog entries:
-# changelog=0.3.4
+changelog=0.3.4
 	Rinominato plugin #467
 	Spostata la la creazione della tabella fab_10k_mod
 	0.3.3
