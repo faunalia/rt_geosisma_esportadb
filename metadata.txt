@@ -12,7 +12,7 @@
 name=RT Geosisma Inizializza Evento
 qgisMinimumVersion=2.0
 description=Prepara la cache di layer WMS per il funzionamento offline di rt_geosisma_offline
-version=0.4.0
+version=0.4.1
 author=Luigi Pirelli (luipir@gmail.com)
 email=info@faunalia.eu
 
@@ -21,7 +21,9 @@ email=info@faunalia.eu
 # Optional items:
 
 # Uncomment the following line and add your changelog entries:
-changelog=0.4.0
+changelog=0.4.1
+	Impostato il valore corretto del server di produzione
+	0.4.0
 	Impostato server di producione come default
 	0.3.4
 	Rinominato plugin #467
