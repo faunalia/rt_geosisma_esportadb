@@ -267,7 +267,10 @@ class ExportDBThread(QThread):
                     # using json.dumps to create strings without ' or " problems
                     poligonsDict[column] = json.dumps(str(poligonsDict[column]))
                 if (columnNameTypes[column] == "real"):
-                    poligonsDict[column] = float(poligonsDict[column])
+                    if poligonsDict[column] != "":
+                        poligonsDict[column] = float(poligonsDict[column])
+                    else:
+                        poligonsDict[column] = 'NULL'
                 if (columnNameTypes[column] != "MULTIPOLYGON" and
                     columnNameTypes[column] != "text"):
                     poligonsDict[column] = str(poligonsDict[column])
