@@ -250,35 +250,46 @@ class ExportDBThread(QThread):
         
         # add record to spatialite db
         for poligons in self.cursor.fetchall():
-            # create a dict for this provincia
-            valueByName = zip(columnames, poligons)
-            poligonsDict = OrderedDict( sorted( valueByName, key=lambda x:x[0] ) )
-            # modify values to match spatialite type
-            for column in columnames:
-                #print column, poligonsDict[column]
-                # None values
-                if (poligonsDict[column] == None):
-                    poligonsDict[column] = ''
-                # the_geom values
-                if (columnNameTypes[column] == "MULTIPOLYGON"):
-                    poligonsDict[column] = "GeomFromText('%s', %d)" % ( poligonsDict[column], DATABASE_SRID)
-                    #poligonsDict[column] = "GeomFromText('MULTIPOLYGON(((0 0,10 20,30 40,0 0),(1 1,2 2,3 3,1 1)),((100 100,110 110,120 120,100 100)))',DATABASE_SRID)"
-                if (columnNameTypes[column] == "text"):
-                    # using json.dumps to create strings without ' or " problems
-                    poligonsDict[column] = json.dumps(str(poligonsDict[column]))
-                if (columnNameTypes[column] == "real"):
-                    if poligonsDict[column] != "":
-                        poligonsDict[column] = float(poligonsDict[column])
-                    else:
-                        poligonsDict[column] = 'NULL'
-                if (columnNameTypes[column] != "MULTIPOLYGON" and
-                    columnNameTypes[column] != "text"):
-                    poligonsDict[column] = str(poligonsDict[column])
-            # do insert
-            sql = 'INSERT INTO fab_catasto ('+ ",".join(columnames) +') VALUES '
-            sql += "(" + ",".join(poligonsDict.values()) + ");"
-            spliteconn.cursor().execute(sql)
-            
+            sql=""
+            try:
+                # create a dict for this provincia
+                valueByName = zip(columnames, poligons)
+                poligonsDict = OrderedDict( sorted( valueByName, key=lambda x:x[0] ) )
+                # modify values to match spatialite type
+                for column in columnames:
+                    #print column, poligonsDict[column]
+                    # None values
+                    if (poligonsDict[column] == None):
+                        poligonsDict[column] = ''
+                    # the_geom values
+                    if (columnNameTypes[column] == "MULTIPOLYGON"):
+                        poligonsDict[column] = "GeomFromText('%s', %d)" % ( poligonsDict[column], DATABASE_SRID)
+                        #poligonsDict[column] = "GeomFromText('MULTIPOLYGON(((0 0,10 20,30 40,0 0),(1 1,2 2,3 3,1 1)),((100 100,110 110,120 120,100 100)))',DATABASE_SRID)"
+                    if (columnNameTypes[column] == "text"):
+                        # using json.dumps to create strings without ' or " problems
+                        poligonsDict[column] = json.dumps(str(poligonsDict[column]))
+                    if (columnNameTypes[column] == "real"):
+                        if poligonsDict[column] != "":
+                            poligonsDict[column] = float(poligonsDict[column])
+                        else:
+                            poligonsDict[column] = 'NULL'
+                    if (columnNameTypes[column] == "numeric" or columnNameTypes[column] == "integer"):
+                        if poligonsDict[column] != "":
+                            poligonsDict[column] = int(poligonsDict[column])
+                        else:
+                            poligonsDict[column] = 'NULL'
+                    if (columnNameTypes[column] != "MULTIPOLYGON" and
+                        columnNameTypes[column] != "text"):
+                        poligonsDict[column] = str(poligonsDict[column])
+                # do insert
+                sql = 'INSERT INTO fab_catasto ('+ ",".join(columnames) +') VALUES '
+                sql += "(" + ",".join(poligonsDict.values()) + ");"
+                spliteconn.cursor().execute(sql)
+                
+            except Exception as ex:
+                self.procMessage.emit(self.tr("Error executing query: %s" % sql), QgsMessageLog.CRITICAL)
+                raise ex
+
             if self.stopThread:
                 return
 
@@ -321,35 +332,46 @@ class ExportDBThread(QThread):
         
         # add record to spatialite db
         for poligons in self.cursor.fetchall():
-            # create a dict for this provincia
-            valueByName = zip(columnames, poligons)
-            poligonsDict = OrderedDict( sorted( valueByName, key=lambda x:x[0] ) )
-            # modify values to match spatialite type
-            for column in columnames:
-                #print column, poligonsDict[column]
-                # None values
-                if (poligonsDict[column] == None):
-                    poligonsDict[column] = ''
-                # the_geom values
-                if (columnNameTypes[column] == "MULTIPOLYGON"):
-                    poligonsDict[column] = "GeomFromText('%s', %d)" % ( poligonsDict[column], DATABASE_SRID)
-                    #poligonsDict[column] = "GeomFromText('MULTIPOLYGON(((0 0,10 20,30 40,0 0),(1 1,2 2,3 3,1 1)),((100 100,110 110,120 120,100 100)))',DATABASE_SRID)"
-                if (columnNameTypes[column] == "text"):
-                    # using json.dumps to create strings without ' or " problems
-                    poligonsDict[column] = json.dumps(str(poligonsDict[column]))
-                if (columnNameTypes[column] == "real"):
-                    if poligonsDict[column] != "":
-                        poligonsDict[column] = float(poligonsDict[column])
-                    else:
-                        poligonsDict[column] = 'NULL'
-                if (columnNameTypes[column] != "MULTIPOLYGON" and
-                    columnNameTypes[column] != "text"):
-                    poligonsDict[column] = str(poligonsDict[column])
-            # do insert
-            sql = 'INSERT INTO fab_10k ('+ ",".join(columnames) +') VALUES '
-            sql += "(" + ",".join(poligonsDict.values()) + ");"
-            spliteconn.cursor().execute(sql)
-            
+            sql=""
+            try:
+                # create a dict for this provincia
+                valueByName = zip(columnames, poligons)
+                poligonsDict = OrderedDict( sorted( valueByName, key=lambda x:x[0] ) )
+                # modify values to match spatialite type
+                for column in columnames:
+                    #print column, poligonsDict[column]
+                    # None values
+                    if (poligonsDict[column] == None):
+                        poligonsDict[column] = ''
+                    # the_geom values
+                    if (columnNameTypes[column] == "MULTIPOLYGON"):
+                        poligonsDict[column] = "GeomFromText('%s', %d)" % ( poligonsDict[column], DATABASE_SRID)
+                        #poligonsDict[column] = "GeomFromText('MULTIPOLYGON(((0 0,10 20,30 40,0 0),(1 1,2 2,3 3,1 1)),((100 100,110 110,120 120,100 100)))',DATABASE_SRID)"
+                    if (columnNameTypes[column] == "text"):
+                        # using json.dumps to create strings without ' or " problems
+                        poligonsDict[column] = json.dumps(str(poligonsDict[column]))
+                    if (columnNameTypes[column] == "real"):
+                        if poligonsDict[column] != "":
+                            poligonsDict[column] = float(poligonsDict[column])
+                        else:
+                            poligonsDict[column] = 'NULL'
+                    if (columnNameTypes[column] == "numeric" or columnNameTypes[column] == "integer"):
+                        if poligonsDict[column] != "":
+                            poligonsDict[column] = int(poligonsDict[column])
+                        else:
+                            poligonsDict[column] = 'NULL'
+                    if (columnNameTypes[column] != "MULTIPOLYGON" and
+                        columnNameTypes[column] != "text"):
+                        poligonsDict[column] = str(poligonsDict[column])
+                # do insert
+                sql = 'INSERT INTO fab_10k ('+ ",".join(columnames) +') VALUES '
+                sql += "(" + ",".join(poligonsDict.values()) + ");"
+                spliteconn.cursor().execute(sql)
+                
+            except Exception as ex:
+            	self.procMessage.emit(self.tr("Error executing query: %s" % sql), QgsMessageLog.CRITICAL)
+            	raise ex
+				
             if self.stopThread:
                 return
 
